@@ -451,6 +451,18 @@
       (let ((t9-1 (-> (method-of-type basebutton basebutton-down-idle) exit))) (if t9-1 (t9-1))))
   :trans
     (behavior ()
+      ;; shrink collision spheres to fit zoomer through sage hut door >_<
+      (when (and *target*
+                (!= (-> (level-get-target-inside *level*) name) 'training) ;; not needed in geyser and makes collision weird
+                (>= 92000.0 (vector-vector-distance (-> self root trans) (-> *target* control trans)))
+                (logtest? (-> *target* control root-prim prim-core action) (collide-action racer))
+                )
+        (let ((prims (the-as collide-shape-prim-group (-> *target* control root-prim))))
+          (dotimes (idx (-> prims num-prims))
+            (set! (-> prims prim idx local-sphere w) 4800.0)
+            )
+          )
+        )
       (when (time-elapsed? (-> self state-time) (seconds 60))
         (case (-> self entity extra perm task)
           (((game-task training-door))
