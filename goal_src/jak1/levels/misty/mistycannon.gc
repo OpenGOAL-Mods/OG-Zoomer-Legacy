@@ -1083,7 +1083,7 @@
   :event
     (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
       (case message
-        (('touch)
+        (('touch 'attack 'ridden) ;; OG-Zoomer
          (when ((method-of-type touching-shapes-entry prims-touching?)
                 (the-as touching-shapes-entry (-> block param 0))
                 (-> self root)

@@ -634,10 +634,11 @@
     (if (and (= (-> self cam-user-mode) 'normal)
              (logtest? (-> self control unknown-surface00 flags) (surface-flags allow-look-around))
              (not (logtest? (-> self control root-prim prim-core action)
-                            (collide-action edgegrab-cam swingpole-active racer snowball tube flut)))
+                            (collide-action edgegrab-cam swingpole-active snowball tube flut))) ;; OG-Zoomer
              (-> *setting-control* current allow-look-around)
              (time-elapsed? (-> self no-look-around-wait) (seconds 0.05))
-             (not (and (= (-> self control ground-pat material) (pat-material ice)) (< 4096.0 (-> self control unknown-float01)))))
+            ;;  (not (and (= (-> self control ground-pat material) (pat-material ice)) (< 4096.0 (-> self control unknown-float01)))) ;; OG-Zoomer
+             )
       (send-event self 'change-mode 'look-around)))
   (when (and (= *cheat-mode* 'debug)
              (cpad-hold? (-> self control unknown-cpad-info00 number) r2)

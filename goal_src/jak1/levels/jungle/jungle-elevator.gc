@@ -47,7 +47,8 @@
       (set! (-> self draw light-index) (the-as uint 255))
       (set! (-> self bottom-height) (-> jungle bottom-height))
       (set! (-> jungle bottom-height) (-> jungleb bottom-height))
-      (set! (-> self grab-player?) (process-grab? *target*)))
+      ;; (set! (-> self grab-player?) (process-grab? *target*)) ;; OG-Zoomer
+      )
   :exit
     (behavior ()
       (set! (-> jungle bottom-height) (-> self bottom-height))
@@ -86,6 +87,6 @@
     (eval-path-curve! (-> this path) s5-0 0.6 'interp)
     (set! (-> this teleport-if-below-y) (-> s5-0 y)))
   (set! (-> this draw light-index) (the-as uint 255))
-  (set! (-> this bidirectional?) #f)
+  (set! (-> this bidirectional?) #t) ;; OG-Zoomer
   (set! (-> this should-grab-player?) #t)
   (none))

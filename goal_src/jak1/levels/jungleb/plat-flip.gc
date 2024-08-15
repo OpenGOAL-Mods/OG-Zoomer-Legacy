@@ -32,7 +32,9 @@
     (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
       (case message
         (('bonk) (activate! (-> self smush) -1.0 90 300 1.0 1.0))
-        (('touch) (send-event proc 'no-look-around (seconds 1.5)) (the-as smush-control #f))))
+        (('touch) 
+          ;; (send-event proc 'no-look-around (seconds 1.5))  ;; OG-Zoomer
+          (the-as smush-control #f))))
   :trans rider-trans
   :code
     (behavior ()

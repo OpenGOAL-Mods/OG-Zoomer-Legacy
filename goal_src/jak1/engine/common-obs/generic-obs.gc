@@ -1200,11 +1200,13 @@
                  (not (send-event *target* 'query 'powerup (pickup-type eco-blue))))
           (level-hint-spawn (text-id sidekick-hint-launcher) "sksp0035" (the-as entity #f) *entity-pool* (game-task none)))))
   :code anim-loop)
-
+  
+(define-extern target-hopping? (function target symbol))
 (defstate launcher-active (launcher)
   :event
     (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
-      (when (or (= message 'touch) (= message 'attack))
+      ;; (when (or (= message 'touch) (= message 'attack)) ;; OG-Zoomer
+      (when (and (= message 'attack) (target-hopping? (the-as target proc)))
         (set-time! (-> self state-time))
         (send-event proc 'launch (-> self spring-height) (-> self camera) (-> self dest) (-> self seek-time)))
       (cond

@@ -157,7 +157,7 @@
         (('touch)
          (when (= (-> proc type) target)
            (when (>= (- (-> (target-pos 0) y) (-> self root trans y)) 409.6)
-             (send-event proc 'no-look-around (seconds 1.5))
+            ;;  (send-event proc 'no-look-around (seconds 1.5)) ;; OG-Zoomer
              (go-virtual trigger))))))
   :code
     (behavior ()

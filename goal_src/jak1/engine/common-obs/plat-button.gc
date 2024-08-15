@@ -51,7 +51,7 @@
   :event
     (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
       (case message
-        (('touch)
+        (('touch 'attack) ;; OG-Zoomer
          (when (can-activate? self)
            (if (and ((method-of-type touching-shapes-entry prims-touching?)
                      (the-as touching-shapes-entry (-> block param 0))

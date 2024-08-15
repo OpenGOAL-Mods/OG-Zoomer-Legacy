@@ -342,7 +342,7 @@
   :event
     (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
       (case message
-        (('trigger)
+        (('trigger 'touch 'attack) ;; OG-Zoomer
          (when (= (-> proc type) square-platform-button)
            (set! (-> self button-id) (-> (the-as square-platform-button proc) button-id))
            (logclear! (-> self mask) (process-mask actor-pause))

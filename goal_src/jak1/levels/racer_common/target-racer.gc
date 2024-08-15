@@ -84,7 +84,8 @@
                  :bend-speed 4.0
                  :alignv 1.0
                  :slope-up-traction 1.0
-                 :align-speed 1.0)))
+                 :align-speed 1.0
+                 :flags (surface-flags allow-look-around))))
   (set! *race-track-surface* v1-2)
   (set! (-> v1-2 touch-hook) nothing)
   (set! (-> v1-2 active-hook) nothing))
@@ -888,3 +889,7 @@
     (set! (-> *racer-shadow-control* settings shadow-dir quad) v1-240))
   0
   (none))
+  
+(defun target-hopping? ((obj target))
+  (-> obj racer hop?)
+  )

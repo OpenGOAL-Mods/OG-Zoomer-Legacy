@@ -218,7 +218,7 @@
   :event
     (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
       (case message
-        (('trigger)
+        (('trigger 'touch 'attack 'ridden) ;; OG-Zoomer
          (let ((v1-1 (-> self fall-dest))
                (a0-4 (-> (the-as vector (-> block param 0)) quad)))
            (set! (-> v1-1 quad) a0-4)
@@ -415,8 +415,8 @@
 (defbehavior double-lurker-default-event-handler double-lurker ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
   (local-vars (v0-0 object))
   (case arg2
-    (('touch) (set-time! (-> self touch-time)) (touch-handler self arg0 arg3))
-    (('attack)
+    ;; (('touch) (set-time! (-> self touch-time)) (touch-handler self arg0 arg3))
+    (('attack 'touch 'ridden)
      (when (= (-> arg0 type) target)
        (nav-enemy-set-hit-from-direction arg0)
        (cond

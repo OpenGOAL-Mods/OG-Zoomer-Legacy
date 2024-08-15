@@ -35,7 +35,8 @@
         (('touch)
          (if (not (or (= (-> self next-state name) 'bouncer-smush) (= (-> self next-state name) 'bouncer-fire))) (go bouncer-smush)))
         (('attack)
-         (when (and (= (-> block param 1) 'flop) (send-event proc 'jump (-> self spring-height) (-> self spring-height) #f))
+        ;;  (when (and (= (-> block param 1) 'flop) (send-event proc 'jump (-> self spring-height) (-> self spring-height) #f)) ;; OG-Zoomer
+         (when (send-event proc 'jump (-> self spring-height) (-> self spring-height) #f)
            (go bouncer-fire)
            #f))))
   :code

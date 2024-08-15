@@ -381,7 +381,9 @@
   :event
     (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
       (case message
-        (('touch) (send-event proc 'no-look-around (seconds 1.5)) #f)))
+        (('touch)
+          ;; (send-event proc 'no-look-around (seconds 1.5))
+          #f)))
   :code
     (behavior ()
       (let ((gp-0 #f))

@@ -920,6 +920,21 @@
   (set! (-> this victory-anim) (fuel-cell-pick-anim this))
   (the-as crate this))
 
+(defun crate-buzzer-shrink ((this crate-buzzer))
+  (when (and (name= (-> this name) "crate-3124")
+            *target*
+            (>= 20000.0 (vector-vector-distance (-> this root trans) (target-pos 0)))
+            (logtest? (-> *target* control root-prim prim-core action) (collide-action racer))
+            )
+    ;; shrink collision spheres to fit zoomer to hit VC fly >_<
+    (let ((prims (the-as collide-shape-prim-group (-> *target* control root-prim))))
+      (dotimes (idx (-> prims num-prims))
+        (set! (-> prims prim idx local-sphere w) 2400.0)
+        )
+      )
+    )
+  )
+
 (defstate wait (crate-buzzer)
   :virtual #t
   :trans
@@ -939,12 +954,14 @@
       (update-transforms! (-> self root))
       (loop
         (set-time! (-> self state-time))
+        (crate-buzzer-shrink self)
         (ja-post)
         (logior! (-> self mask) (process-mask sleep-code))
         (suspend)
         (let ((f30-0 57001.605))
           (sound-play "crate-jump")
           (while (or (!= (-> self smush amp) 0.0) (!= f30-0 0.0))
+            (crate-buzzer-shrink self)
             (+! f30-0 (* -245760.0 (seconds-per-frame)))
             (+! (-> self root trans y) (* f30-0 (seconds-per-frame)))
             (when (< (-> self root trans y) (-> self base y))

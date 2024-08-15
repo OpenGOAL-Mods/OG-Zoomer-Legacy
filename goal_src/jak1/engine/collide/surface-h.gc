@@ -1125,7 +1125,7 @@
                   :alignv 1.0
                   :slope-up-traction 1.0
                   :align-speed 1.0
-                  :flags (surface-flags no-turn-around no-rotate-toward-transv))))
+                  :flags (surface-flags allow-look-around no-turn-around no-rotate-toward-transv)))) ;; OG-Zoomer
   ;; og:preserve-this
   (define *ice-surface* v1-48)
   (set! (-> v1-48 mult-hook) (the-as (function surface surface surface int none) nothing))

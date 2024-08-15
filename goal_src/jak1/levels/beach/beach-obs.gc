@@ -780,8 +780,10 @@
   :event
     (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
       (when (and (= message 'attack)
-                 (or (= (-> block param 1) 'punch) (= (-> block param 1) 'spin) (= (-> block param 1) 'spin-air))
-                 (!= (-> self incomming-attack-id) (-> block param 2)))
+                 (or (= (-> block param 1) 'racer) (!= (-> self incomming-attack-id) (-> block param 2)))
+                ;;  (or (= (-> block param 1) 'punch) (= (-> block param 1) 'spin) (= (-> block param 1) 'spin-air)) ;; OG-Zoomer
+                ;;  (!= (-> self incomming-attack-id) (-> block param 2))
+                 )
         (set! (-> self incomming-attack-id) (-> block param 2))
         (flutflutegg-hit-sounds)
         (let ((s5-1 (vector-! (new-stack-vector0) (-> (the-as process-drawable proc) root trans) (-> self root trans))))
@@ -829,8 +831,10 @@
     (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
       (when (and (time-elapsed? (-> self state-time) (seconds 0.5))
                  (= message 'attack)
-                 (or (= (-> block param 1) 'punch) (= (-> block param 1) 'spin) (= (-> block param 1) 'spin-air))
-                 (!= (-> self incomming-attack-id) (-> block param 2)))
+                 (or (= (-> block param 1) 'racer) (!= (-> self incomming-attack-id) (-> block param 2)))
+                ;;  (or (= (-> block param 1) 'punch) (= (-> block param 1) 'spin) (= (-> block param 1) 'spin-air)) ;; OG-Zoomer
+                ;;  (!= (-> self incomming-attack-id) (-> block param 2))
+                 )
         (set! (-> self incomming-attack-id) (-> block param 2))
         (flutflutegg-hit-sounds)
         (let ((s5-1 (vector-! (new-stack-vector0) (-> (the-as process-drawable proc) root trans) (-> self root trans))))

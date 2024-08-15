@@ -13,6 +13,6 @@
   "dark-crystal-ag.go"
   "mother-spider-ag.go"
   "spider-egg-ag.go"
-  "water-anim-darkcave-ag.go"
+  ;; "water-anim-darkcave-ag.go" ;; disable water in dark cave
   "darkcave-vis.go"
  ))

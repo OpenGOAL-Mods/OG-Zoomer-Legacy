@@ -129,6 +129,18 @@
          (ja :group! gondola-idle-down-ja)))
       (transform-post)
       (loop
+        ;; shrink collision spheres to fit zoomer into gondola >_<
+        (when (and *target* 
+                 (>= 64000.0 (vector-vector-distance (vector<-cspace! (new 'stack-no-clear 'vector) (-> self node-list data 3)) (target-pos 0)))
+                 (logtest? (-> *target* control root-prim prim-core action) (collide-action racer))
+                 )
+                  (format 0 "gondola dist ~F~%" (vector-vector-distance (vector<-cspace! (new 'stack-no-clear 'vector) (-> self node-list data 3)) (target-pos 0)))
+          (let ((prims (the-as collide-shape-prim-group (-> *target* control root-prim))))
+            (dotimes (idx (-> prims num-prims))
+              (set! (-> prims prim idx local-sphere w) 5600.0)
+              )
+            )
+          )
         (when (and *target*
                    (and (< (vector-vector-distance (vector<-cspace! (new 'stack-no-clear 'vector) (joint-node gondola-lod0-jg main)) (target-pos 0))
                            81920.0)
@@ -145,14 +157,14 @@
                                         self
                                         (vector-vector-distance (vector<-cspace! (new 'stack-no-clear 'vector) (-> self node-list data 3)) (target-pos 0)))
                             (file-status *art-control* (-> self anim name) 0)))))
-          (let ((s3-0 (get-reminder (get-task-control (game-task village3-button)) 2))
-                (s4-1 (and *cheat-mode* (cpad-hold? 0 l3)))
+          (let (;; (s3-0 (get-reminder (get-task-control (game-task village3-button)) 2))
+                ;; (s4-1 (and *cheat-mode* (cpad-hold? 0 l3)))
                 (s5-1 (vector<-cspace! (new 'stack-no-clear 'vector) (joint-node gondola-lod0-jg main))))
-            (cond
-              ((not (or s4-1 (task-closed? (game-task village3-button) (task-status need-hint)))))
-              ((and (< (the int (-> *game-info* fuel)) (+ s3-0 2)) (< (the int (-> *game-info* fuel)) 71) (not s4-1))
-               (level-hint-spawn (text-id gondola-need-cells) "asstvb75" (the-as entity #f) *entity-pool* (game-task none)))
-              (else
+            ;; (cond
+            ;;   ((not (or s4-1 (task-closed? (game-task village3-button) (task-status need-hint)))))
+            ;;   ((and (< (the int (-> *game-info* fuel)) (+ s3-0 2)) (< (the int (-> *game-info* fuel)) 71) (not s4-1))
+            ;;    (level-hint-spawn (text-id gondola-need-cells) "asstvb75" (the-as entity #f) *entity-pool* (game-task none)))
+            ;;   (else
                (level-hint-spawn (text-id gondola-enough-cells) "asstvb76" (the-as entity #f) *entity-pool* (game-task none))
                (let ((s4-3 (new 'stack-no-clear 'event-message-block)))
                  (set! (-> s4-3 from) self)
@@ -184,7 +196,8 @@
                    (set! (-> s5-2 flags) (font-flags shadow kerning large))
                    (print-game-text (lookup-text! *common-text* (text-id press-to-use) #f) s5-2 #f 128 22))
                  (when (and (cpad-pressed? 0 circle) (process-grab? *target*))
-                   (if arg0 (go-virtual ride-down) (go-virtual ride-up))))))))
+                   (if arg0 (go-virtual ride-down) (go-virtual ride-up)))) ;; ))
+                   ))
         (spool-push *art-control* (-> self anim name) 0 self -99.0)
         (suspend))))
 

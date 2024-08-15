@@ -340,7 +340,7 @@
 (defbehavior display-loop process ()
   "the main 'display loop' in GOAL. v-sync is done in this function, so all frames start and end here."
   ;; increase our stack size.
-  (stack-size-set! (-> self main-thread) 512)
+  (stack-size-set! (-> self main-thread) 1024) ;; OG-Zoomer
   (let ((disp *display*))
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Pre loop initialization
