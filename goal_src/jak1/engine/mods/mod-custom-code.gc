@@ -78,8 +78,10 @@ an orb |#
       )
       )
     (else
-      (if (not (logtest? (-> *kernel-context* prevent-from-run) (process-mask movie)))
-        (send-event *target* 'change-mode 'racing #f))
+      (when (not (logtest? (-> *kernel-context* prevent-from-run) (process-mask movie)))
+        (send-event *target* 'change-mode 'racing #f)
+        (send-event *camera* 'set-slave-option #x6000)
+        )
       )
     )
 

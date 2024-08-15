@@ -116,7 +116,7 @@ void extract_art_groups_from_level(const ObjectFileDB& db,
       if (file.name.length() > 3 && !file.name.compare(file.name.length() - 3, 3, "-ag")) {
         const auto& ag_file = db.lookup_record(file);
         extract_merc(ag_file, tex_db, db.dts, tex_remap, level_data, false, db.version());
-        extract_joint_group(ag_file, db.dts, db.version(), art_group_data);
+        // extract_joint_group(ag_file, db.dts, db.version(), art_group_data);
       }
     }
   }
@@ -243,7 +243,9 @@ level_tools::BspHeader extract_bsp_from_level(const ObjectFileDB& db,
   if (bsp_header.hfrag) {
     extract_hfrag(bsp_header, tex_db, &level_data);
   }
-  level_data.level_name = bsp_header.name;
+  if (level_data.level_name == "") {
+    level_data.level_name = bsp_header.name;
+  }
 
   return bsp_header;
 }
@@ -347,6 +349,18 @@ void extract_from_level(const ObjectFileDB& db,
   auto bsp_header = extract_bsp_from_level(db, tex_db, dgo_name, config, level_data);
   extract_art_groups_from_level(db, tex_db, bsp_header.texture_remap_table, dgo_name, level_data,
                                 art_group_data);
+
+  // for jak 1, copy firecanyon art group into any other level (zoomer)
+  if (config.game_name == "jak1" && dgo_name != "FIC.DGO") {
+    add_all_textures_from_level(level_data, "FIC.DGO", tex_db);
+    auto tmp_bsp = extract_bsp_from_level(db, tex_db, "FIC.DGO", config, level_data);
+    extract_art_groups_from_level(
+        db, tex_db,
+        tmp_bsp
+            .texture_remap_table,
+        "FIC.DGO", level_data, art_group_data);
+    lg::info("art groups added from FIC.DGO for other DGO {}", dgo_name);
+  }
 
   Serializer ser;
   level_data.serialize(ser);
