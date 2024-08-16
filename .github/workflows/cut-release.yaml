@@ -22,12 +22,12 @@ jobs:
     uses: open-goal/mod-bundling-tools/.github/workflows/mod-bundler.yml@v1
     with:
       semverBump: ${{ inputs.bump }}
-      metadataName: "Test Mod Bundle"
-      metadataDescription: "This is a test mod bundle. 2"
+      metadataName: "Zoomer Legacy"
+      metadataDescription: "Play the whole game on the Zoomer, with various changes to better explore the entire game."
       metadataSupportedGames: "jak1"
-      metadataAuthors: "barg,vaser"
-      metadataTags: "rng,gameplay-mod"
-      metadataWebsiteUrl: "https://www.example.com/this/is/optional"
+      metadataAuthors: "zed,barg"
+      metadataTags: "speedrunning,challenge,gameplay-mod"
+      metadataWebsiteUrl: "https://github.com/OpenGOAL-Mods/OG-Zoomer-Legacy"
       skipMacOS: true
       skipLinux: true
       toolingBinaryDir: "out/build/Release/bin"
