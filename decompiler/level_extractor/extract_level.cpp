@@ -116,7 +116,7 @@ void extract_art_groups_from_level(const ObjectFileDB& db,
       if (file.name.length() > 3 && !file.name.compare(file.name.length() - 3, 3, "-ag")) {
         const auto& ag_file = db.lookup_record(file);
         extract_merc(ag_file, tex_db, db.dts, tex_remap, level_data, false, db.version());
-        // extract_joint_group(ag_file, db.dts, db.version(), art_group_data);
+        extract_joint_group(ag_file, db.dts, db.version(), art_group_data);
       }
     }
   }
@@ -243,9 +243,7 @@ level_tools::BspHeader extract_bsp_from_level(const ObjectFileDB& db,
   if (bsp_header.hfrag) {
     extract_hfrag(bsp_header, tex_db, &level_data);
   }
-  if (level_data.level_name == "") {
-    level_data.level_name = bsp_header.name;
-  }
+  level_data.level_name = bsp_header.name;
 
   return bsp_header;
 }
@@ -325,8 +323,7 @@ void extract_common(const ObjectFileDB& db,
 
   if (config.rip_levels) {
     auto file_path = file_util::get_jak_project_dir() / "glb_out" /
-                     game_version_names[config.game_version] / "common.glb";
-    file_util::create_dir_if_needed_for_file(file_path);
+                     game_version_names[config.game_version] / "common";
     save_level_foreground_as_gltf(tfrag_level, art_group_data, file_path);
   }
 }
@@ -350,18 +347,6 @@ void extract_from_level(const ObjectFileDB& db,
   extract_art_groups_from_level(db, tex_db, bsp_header.texture_remap_table, dgo_name, level_data,
                                 art_group_data);
 
-  // for jak 1, copy firecanyon art group into any other level (zoomer)
-  if (config.game_name == "jak1" && dgo_name != "FIC.DGO") {
-    add_all_textures_from_level(level_data, "FIC.DGO", tex_db);
-    auto tmp_bsp = extract_bsp_from_level(db, tex_db, "FIC.DGO", config, level_data);
-    extract_art_groups_from_level(
-        db, tex_db,
-        tmp_bsp
-            .texture_remap_table,
-        "FIC.DGO", level_data, art_group_data);
-    lg::info("art groups added from FIC.DGO for other DGO {}", dgo_name);
-  }
-
   Serializer ser;
   level_data.serialize(ser);
   auto compressed =
@@ -375,14 +360,12 @@ void extract_from_level(const ObjectFileDB& db,
 
   if (config.rip_levels) {
     auto back_file_path = file_util::get_jak_project_dir() / "glb_out" /
-                          game_version_names[config.game_version] /
+                          game_version_names[config.game_version] / level_data.level_name /
                           fmt::format("{}-background.glb", level_data.level_name);
     file_util::create_dir_if_needed_for_file(back_file_path);
     save_level_background_as_gltf(level_data, back_file_path);
     auto fore_file_path = file_util::get_jak_project_dir() / "glb_out" /
-                          game_version_names[config.game_version] /
-                          fmt::format("{}-foreground.glb", level_data.level_name);
-    file_util::create_dir_if_needed_for_file(fore_file_path);
+                          game_version_names[config.game_version] / level_data.level_name;
     save_level_foreground_as_gltf(level_data, art_group_data, fore_file_path);
   }
   file_util::write_text_file(entities_folder / fmt::format("{}-actors.json", level_data.level_name),
